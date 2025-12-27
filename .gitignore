@@ -1,2 +1,51 @@
-simulation_code_debugger.egg-info
-.venv
+# ==============================
+# Python
+# ==============================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ==============================
+# MCP / Claude
+# ==============================
+.mcp/
+mcp.log
+
+# ==============================
+# OS / Editor
+# ==============================
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+
+# ==============================
+# Logs
+# ==============================
+*.log
+
+# ==============================
+# Environment variables
+# ==============================
+.env
+.env.*
