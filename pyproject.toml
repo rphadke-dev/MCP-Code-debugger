@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "simulation-code-debugger"
+version = "0.1.0"
+
+[tools.setuptools]
+package-dir = {"" = "src"}
+
+[tools.setuptools.packages.find]
+where = ["src"]
