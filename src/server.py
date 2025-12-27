@@ -2,33 +2,31 @@ from mcp.server.fastmcp import FastMCP
 from simulation.engine import SimulationEngine
 from debugger.analyzer import SimulationAnalyzer
 
-mcp = FastMCP("simulation-debugger")
+mcp = FastMCP("simulation-code-debugger")
 
 engine = SimulationEngine()
 analyzer = SimulationAnalyzer()
 
+@mcp.tool()
+def ping():
+    return "pong"
 
 @mcp.tool()
-def run_simulation_step() -> dict:
-    """
-    Advance the simulation by one step and return the new state.
-    """
-    state = engine.step()
-    return state.snapshot()
-
-
-@mcp.tool()
-def analyze_simulation() -> dict:
-    """
-    Analyze the current simulation state and explain anomalies.
-    """
-    return analyzer.analyze(engine.state)
-
+def run_simulation_step():
+    state = engine.step_forward()
+    return {
+        "step": state.step,
+        "variables": state.variables,
+        "call_stack": state.call_stack,
+        "last_operation": state.last_operation,
+        "issues": state.issues,
+    }
 
 @mcp.tool()
-def ping() -> str:
-    return "Simulation Debugger MCP is running"
-
+def analyze_simulation():
+    issues = analyzer.analyze(engine.state)
+    engine.state.issues = issues
+    return issues
 
 if __name__ == "__main__":
     mcp.run()
