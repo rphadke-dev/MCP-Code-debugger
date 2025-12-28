@@ -22,7 +22,7 @@ This is no longer a toy debugger — it is a foundation for AI developer tooling
 
 ---
 
-## 🚀 Day 10 Highlights
+## 🚀 Highlights
 
 ```mermaid
 graph TD
