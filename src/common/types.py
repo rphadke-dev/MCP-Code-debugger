@@ -13,4 +13,9 @@ class DebugReport(BaseModel):
     total_steps: int
     issues: List[Issue]
     explanations: List[str]
-    suggestions: List[str] = []
+    suggestions: List[Suggestion]
+
+class Suggestion(BaseModel):
+    issue_type: str
+    message: str
+    example_fix: str

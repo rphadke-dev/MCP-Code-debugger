@@ -1,6 +1,7 @@
 import operator as py_operator
 from simulation.state import SimulationState
 from simulation.history import SimulationHistory
+from simulation.extractor import extract_operations
 
 
 BINARY_OPS = {
@@ -16,6 +17,11 @@ class SimulationEngine:
         self.history = SimulationHistory()
         self.variables = {}
         self.step = 0
+    
+    def run_code(self, code: str):
+        operations = extract_operations(code)
+        for op in operations:
+            self.run_step(op)
 
     def run_step(self, operation: str) -> SimulationState:
         self.step += 1
