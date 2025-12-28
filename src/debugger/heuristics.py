@@ -1,24 +1,22 @@
+from simulation.state import SimulationState
 from common.types import Issue
-from debugger.trace import ExecutionTrace
 
 
 class Heuristics:
-    def evaluate(self, trace: ExecutionTrace):
+    @staticmethod
+    def detect(state: SimulationState):
         issues = []
 
-        for state in trace.states:
-            if state.last_operation and "/" in state.last_operation:
-                parts = state.last_operation.split()
-                if len(parts) == 3:
-                    _, _, right = parts
-                    if state.variables.get(right) == 0:
-                        issues.append(
-                            Issue(
-                                type="division_by_zero",
-                                step=state.step,
-                                message="Division by zero detected",
-                                operation=state.last_operation,
-                            )
-                        )
+        if state.last_operation and "/" in state.last_operation:
+            left, right = state.last_operation.split("/")
+            if state.variables.get(right.strip()) == 0:
+                issues.append(
+                    Issue(
+                        type="division_by_zero",
+                        step=state.step,
+                        message="Division by zero detected",
+                        operation=state.last_operation,
+                    )
+                )
 
         return issues
