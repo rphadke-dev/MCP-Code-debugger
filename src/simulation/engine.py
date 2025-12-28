@@ -1,20 +1,22 @@
-from simulation.state import SimluationState
+from simulation.state import SimulationState
+from simulation.history import SimulationHistory
+
 
 class SimulationEngine:
     def __init__(self):
-        self.state = SimluationState()
+        self.state = SimulationState()
+        self.history = SimulationHistory()
 
-    def step_forward(self):
+    def step(self, operation: str) -> SimulationState:
         self.state.step += 1
+        self.state.last_operation = operation
 
-        if self.state.step == 1:
-            self.state.variables['x'] = 10
-            self.state.variables['z'] = 0
-            self.state.call_stack = ["main"]
-            self.state.last_operation = ["x = 10; z = 0"]
+        # NOTE: We do NOT evaluate expressions yet (Day 5)
+        # We only record intent
+        self.history.add(self.state.copy())
 
-        elif self.state.step == 2:
-            self.state.call_stack.append("divide")
-            self.state.last_operation = "y = x/z"
-        
         return self.state
+
+    def reset(self):
+        self.state = SimulationState()
+        self.history.clear()

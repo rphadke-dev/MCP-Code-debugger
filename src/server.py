@@ -7,26 +7,22 @@ mcp = FastMCP("simulation-code-debugger")
 engine = SimulationEngine()
 analyzer = SimulationAnalyzer()
 
+
 @mcp.tool()
-def ping():
+def ping() -> str:
     return "pong"
 
-@mcp.tool()
-def run_simulation_step():
-    state = engine.step_forward()
-    return {
-        "step": state.step,
-        "variables": state.variables,
-        "call_stack": state.call_stack,
-        "last_operation": state.last_operation,
-        "issues": state.issues,
-    }
 
 @mcp.tool()
-def analyze_simulation():
-    issues = analyzer.analyze(engine.state)
-    engine.state.issues = issues
-    return issues
+def run_simulation_step(operation: str) -> dict:
+    state = engine.step(operation)
+    return state.dict()
+
+
+@mcp.tool()
+def analyze_simulation() -> dict:
+    return analyzer.analyze(engine.history)
+
 
 if __name__ == "__main__":
     mcp.run()
