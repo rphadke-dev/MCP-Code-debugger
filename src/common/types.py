@@ -13,3 +13,4 @@ class DebugReport(BaseModel):
     total_steps: int
     issues: List[Issue]
     explanations: List[str]
+    suggestions: List[str] = []

@@ -1,20 +1,23 @@
-from common.types import DebugReport
 from typing import List
-from common.types import Issue
+from simulation.state import SimulationState
+from common.types import DebugReport, Issue
 
 
-class DebugReportBuilder:
+class ReportBuilder:
     @staticmethod
-    def build(issues: List[Issue], total_steps: int) -> DebugReport:
+    def generate(states: List[SimulationState]) -> DebugReport:
         explanations = []
 
-        for issue in issues:
-            explanations.append(
-                f"Issue '{issue.type}' occurred at step {issue.step} during '{issue.operation}'"
-            )
+        for state in states:
+            for var, val in state.variables.items():
+                if val == 0:
+                    explanations.append(
+                        f"Variable '{var}' was set to 0 at step {state.step}."
+                    )
 
         return DebugReport(
-            total_steps=total_steps,
-            issues=issues,
+            total_steps=len(states),
+            issues=[],
             explanations=explanations,
+            suggestions=[],
         )

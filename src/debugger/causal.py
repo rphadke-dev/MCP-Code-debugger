@@ -3,19 +3,19 @@ from simulation.history import SimulationHistory
 
 class CausalAnalyzer:
     @staticmethod
-    def explain(history: SimulationHistory):
+    def explain(history: SimulationHistory) -> list[str]:
         explanations = []
+
         states = history.all()
+        for i, state in enumerate(states):
+            if state.last_operation and "/" in state.last_operation:
+                left, right = state.last_operation.split("/")
+                right = right.strip()
 
-        for i in range(1, len(states)):
-            prev = states[i - 1]
-            curr = states[i]
-
-            for var, value in curr.variables.items():
-                if var in prev.variables and value == 0:
+                if state.variables.get(right) == 0:
                     explanations.append(
-                        f"Variable '{var}' was set to 0 at step {curr.step}, "
-                        f"which likely caused a later failure."
+                        f"Variable '{right}' was set to 0 at step {state.step}, "
+                        f"which caused a division by zero in a later operation."
                     )
 
         return explanations
