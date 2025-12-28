@@ -1,21 +1,12 @@
-from typing import List
 from simulation.history import SimulationHistory
-from common.types import TraceStep
+from simulation.state import SimulationState
+from typing import List
 
 
 class ExecutionTrace:
-    def __init__(self, steps: List[TraceStep]):
-        self.steps = steps
+    def __init__(self, states: List[SimulationState]):
+        self.states = states
 
     @classmethod
     def from_history(cls, history: SimulationHistory) -> "ExecutionTrace":
-        steps = [
-            TraceStep(
-                step=s.step,
-                variables=s.variables,
-                call_stack=s.call_stack,
-                last_operation=s.last_operation,
-            )
-            for s in history.all()
-        ]
-        return cls(steps)
+        return cls(history.all())

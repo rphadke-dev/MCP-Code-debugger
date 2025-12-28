@@ -1,33 +1,24 @@
-from typing import List
-from debugger.trace import ExecutionTrace
 from common.types import Issue
+from debugger.trace import ExecutionTrace
 
 
 class Heuristics:
-    @staticmethod
-    def evaluate(trace: ExecutionTrace) -> List[Issue]:
-        issues: List[Issue] = []
+    def evaluate(self, trace: ExecutionTrace):
+        issues = []
 
-        for step in trace.steps:
-            if step.last_operation and "/0" in step.last_operation.replace(" ", ""):
-                issues.append(
-                    Issue(
-                        id="division_by_zero",
-                        severity="high",
-                        message="Possible division by zero detected",
-                        step=step.step,
-                        operation=step.last_operation,
-                    )
-                )
-
-            if len(step.call_stack) > 5:
-                issues.append(
-                    Issue(
-                        id="deep_call_stack",
-                        severity="medium",
-                        message="Call stack unusually deep",
-                        step=step.step,
-                    )
-                )
+        for state in trace.states:
+            if state.last_operation and "/" in state.last_operation:
+                parts = state.last_operation.split()
+                if len(parts) == 3:
+                    _, _, right = parts
+                    if state.variables.get(right) == 0:
+                        issues.append(
+                            Issue(
+                                type="division_by_zero",
+                                step=state.step,
+                                message="Division by zero detected",
+                                operation=state.last_operation,
+                            )
+                        )
 
         return issues

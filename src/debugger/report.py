@@ -1,12 +1,20 @@
+from common.types import DebugReport
 from typing import List
 from common.types import Issue
 
 
-class DebugReport:
+class DebugReportBuilder:
     @staticmethod
-    def generate(issues: List[Issue]) -> dict:
-        return {
-            "issues": [issue.dict() for issue in issues],
-            "total_issues": len(issues),
-            "explanations": [issue.message for issue in issues],
-        }
+    def build(issues: List[Issue], total_steps: int) -> DebugReport:
+        explanations = []
+
+        for issue in issues:
+            explanations.append(
+                f"Issue '{issue.type}' occurred at step {issue.step} during '{issue.operation}'"
+            )
+
+        return DebugReport(
+            total_steps=total_steps,
+            issues=issues,
+            explanations=explanations,
+        )

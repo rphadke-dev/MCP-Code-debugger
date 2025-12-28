@@ -1,17 +1,15 @@
-from typing import Dict, Any, List
+from typing import List, Dict, Any
 from pydantic import BaseModel
 
 
 class Issue(BaseModel):
-    id: str
-    severity: str
-    message: str
-    step: int | None = None
-    operation: str | None = None
-
-
-class TraceStep(BaseModel):
+    type: str
     step: int
-    variables: Dict[str, Any]
-    call_stack: List[str]
-    last_operation: str | None
+    message: str
+    operation: str
+
+
+class DebugReport(BaseModel):
+    total_steps: int
+    issues: List[Issue]
+    explanations: List[str]

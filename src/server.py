@@ -9,19 +9,24 @@ analyzer = SimulationAnalyzer()
 
 
 @mcp.tool()
-def ping() -> str:
+def ping():
     return "pong"
 
 
 @mcp.tool()
-def run_simulation_step(operation: str) -> dict:
-    state = engine.step(operation)
-    return state.dict()
+def run_simulation_step(operation: str):
+    state = engine.run_step(operation)
+    return {
+        "step": state.step,
+        "variables": state.variables,
+        "last_operation": state.last_operation,
+    }
 
 
 @mcp.tool()
-def analyze_simulation() -> dict:
-    return analyzer.analyze(engine.history)
+def analyze_simulation():
+    report = analyzer.analyze(engine.history)
+    return report.dict()
 
 
 if __name__ == "__main__":
